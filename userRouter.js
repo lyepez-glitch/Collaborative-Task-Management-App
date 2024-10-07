@@ -13,10 +13,11 @@ router.get('/', async(req, res) => {
     res.json(user);
 })
 
-router.post('/edit', upload.single('editedProfileImage'), async(req, res) => {
+router.post('/edit/:id', upload.single('editedProfileImage'), async(req, res) => {
     const { editedName, editedFirstName, editedLastName, editedPassword } = req.body;
-    const userId = req.user.id;
-    const editedImg = req.files['editedProfileImage'][0];
+    const userId = req.params.id;
+    console.log('req.file', req.file)
+    const editedImg = req.file.path;
     const updateUser = await prisma.user.update({
         where: {
             id: userId

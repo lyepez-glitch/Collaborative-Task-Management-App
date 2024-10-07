@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-function LogIn({setLogin,setUser,user,setUsers,users}){
-  const [username,setUsername] = useState('');
-  const [password,setPassword] = useState('');
+function LogIn({password,setPassword,username,setFirstName,setLastName,setUserName,setLogin,setUser,user,setUsers,users,setToken}){
+
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
@@ -17,6 +16,10 @@ function LogIn({setLogin,setUser,user,setUsers,users}){
     if(data.message==='Logged In successfully'){
       console.log(18)
       setUser(data.user);
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setUserName(user.userName);
+      setToken(data.token);
       setLogin(true);
       const response = await axios.get('http://localhost:3000/users');
       console.log('fetched users',response.data);

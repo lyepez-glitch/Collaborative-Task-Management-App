@@ -12,6 +12,13 @@ function App() {
   const [signedUp, setSignup] = useState(false);
   const [user,setUser] = useState('');
   const [users,setUsers] = useState('');
+  const [token,setToken] = useState('');
+  const [firstName,setFirstName] = useState('');
+  const [lastName,setLastName] = useState('');
+  const [userName,setUserName] = useState('');
+  const [password,setPassword] = useState('');
+
+
 
   useEffect(() => {
     const fetchData = async ()=>{
@@ -33,13 +40,13 @@ function App() {
           loggedIn?(
             <div>
               Welcome to dashboard
-              <Profile setUsers={setUsers} users={users} setUser={setUser} user={user}/>
+              <Profile username={userName} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName}  setPassWord={setPassword} password={password} firstName={firstName} lastName = {lastName}  setUsers={setUsers} users={users} setUser={setUser} user={user}/>
             </div>
           ):(
-            <LogIn setUsers={setUsers} users={users} setUser={setUser} user={user} setLogin={setLogin}/>
+            <LogIn password={password} username={userName} setPassword={setPassword} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName} setToken={setToken} setUsers={setUsers} users={users} setUser={setUser} user={user} setLogin={setLogin}/>
           )
         ):(
-          <SignUp setUsers={setUsers} users={users} setUser={setUser} user={user} setSignup={setSignup}/>
+          <SignUp username={userName} setUsername={setUserName} password={password} setPassword={setPassword} setUsers={setUsers} users={users} setUser={setUser} user={user} setSignup={setSignup}/>
         )
       }
     </div>

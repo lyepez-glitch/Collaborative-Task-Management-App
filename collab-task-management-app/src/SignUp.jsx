@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-function SignUp({setSignup,setUser,user,setUsers,users}){
-  const [username,setUsername] = useState('');
-  const [password,setPassword] = useState('');
+function SignUp({username,setUsername,password,setPassword,setSignup,setUser,user,setUsers,users}){
+
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
