@@ -40,7 +40,7 @@ function App() {
           loggedIn?(
             <div>
               Welcome to dashboard
-              <Profile username={userName} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName}  setPassWord={setPassword} password={password} firstName={firstName} lastName = {lastName}  setUsers={setUsers} users={users} setUser={setUser} user={user}/>
+              <Profile token={token} username={userName} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName}  setPassWord={setPassword} password={password} firstName={firstName} lastName = {lastName}  setUsers={setUsers} users={users} setUser={setUser} user={user}/>
             </div>
           ):(
             <LogIn password={password} username={userName} setPassword={setPassword} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName} setToken={setToken} setUsers={setUsers} users={users} setUser={setUser} user={user} setLogin={setLogin}/>

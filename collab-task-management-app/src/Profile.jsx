@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Profile({ setUser, setUsers,users,user }) {
+function Profile({ setUser, token,setUsers,users,user }) {
     const [edit, setEdit] = useState(null);
     const [editedPassword, setEditedPassword] = useState('');
     const [editedUsername, setEditedUsername] = useState('');
@@ -32,6 +32,7 @@ function Profile({ setUser, setUsers,users,user }) {
             const { data } = await axios.post(`http://localhost:3000/users/edit/${user.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Set the header for file upload
+                    'Authorization': `Bearer ${token}`,
                 },
             });
             setEdit(null);
@@ -114,7 +115,7 @@ function Profile({ setUser, setUsers,users,user }) {
                     <div>First Name: {user.firstName}</div>
                     <div>Last Name: {user.lastName}</div>
                     <div>Role: {user.role}</div>
-                    <div>Profile Image: <img src={user.profileImage} alt="" /></div>
+                    <div>Profile Image: <img style={{width: '100px',height:'100px'}} src={'http://localhost:3000/' + user.profileImage} alt="" /></div>
                     <button onClick={() => handleEdit(user.id)}>Edit Profile</button>
                 </>
             )}

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express')
+const path = require('path');
 const app = express()
 var jwt = require('jsonwebtoken');
 const port = 3000
@@ -9,6 +10,7 @@ const bcrypt = require('bcrypt')
 app.use(express.json());
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const corsOptions = {
     "origin": "*",
     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
