@@ -6,6 +6,7 @@ function Task({users,token,setUsers}){
   const [title,setTitle] = useState('');
   const [desc,setDesc] = useState('');
   const [dueDate,setDueDate] = useState('');
+  const [status,setStatus] = useState('');
 
 
 
@@ -19,7 +20,8 @@ function Task({users,token,setUsers}){
       title,
       desc,
       assignTo,
-      dueDate
+      dueDate,
+      status
   };
 
 
@@ -46,6 +48,7 @@ function Task({users,token,setUsers}){
     setAssignTo(null)
     setTitle(null);
     setDesc(null);
+    setStatus(null);
   }
   return (
     <>
@@ -69,6 +72,17 @@ function Task({users,token,setUsers}){
               name="desc"
               value={desc}
               onChange={(e)=>setDesc(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="status">Status:</label>
+            <input
+              type="text"
+              id="status"
+              name="status"
+              value={status}
+              onChange={(e)=>setStatus(e.target.value)}
               required
             />
           </div>

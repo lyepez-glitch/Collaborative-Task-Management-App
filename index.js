@@ -105,12 +105,13 @@ app.get('/tasks', async(req, res) => {
 })
 app.post('/tasks', async(req, res) => {
     console.log('req body ', req.body);
-    const { title, desc, assignTo, dueDate } = req.body;
+    const { title, desc, assignTo, dueDate, status } = req.body;
     try {
         const task = await prisma.task.create({
             data: {
                 title,
                 description: desc,
+                status,
                 assignedTo: {
                     connect: {
                         id: assignTo
@@ -156,6 +157,22 @@ app.post('/projects', async(req, res) => {
     } catch (error) {
         res.status(400).json({ error: 'Project creation failed', message: error.message });
     }
+
+})
+
+app.put('/tasks/editStatus/:id', async(req, res) => {
+    console.log('edited req status body ', req.body);
+    const { status } = req.body;
+    const { id } = req.params;
+    const updatedTask = await prisma.task.update({
+        where {
+            id: id
+        },
+        data: {
+            status
+        }
+    })
+    res.status(201).json(updatedTask);
 
 })
 

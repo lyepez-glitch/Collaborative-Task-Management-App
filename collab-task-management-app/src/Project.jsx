@@ -11,6 +11,36 @@ function Project({ token,setUsers }) {
     const [editedName,setEditedName] = useState('');
     const [editedDescription,setEditedDescription] = useState('');
     const [editedSelectedTasks,setEditedSelectedTasks] = useState('');
+    const [setEditedStatus,editedStatus] = useState('');
+    const [setEditStatus,editStatus] = useState('');
+    const handleEditStatusSubmit = (e)=>{
+      e.preventDefault();
+      const taskData = {
+        status:editedStatus
+      }
+      try{
+        const { data } = await axios.put(`http://localhost:3000/tasks/editStatus/${editStatus}`, taskData, {
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
+              },
+          });
+
+          console.log('edited task status response:', data);
+          const tasksResponse = await axios.get('http://localhost:3000/tasks');
+          console.log('fetched tasks', tasksResponse.data);
+          setTasks(tasksResponse.data);
+          const projectsResponse = await axios.get('http://localhost:3000/projects');
+          console.log('fetched projects', projectsResponse.data);
+          setProjects(projectsResponse.data);
+      }catch(error){
+        console.error('Error updating task status:', error.message);
+      }
+    }
+    const handleStatusEdit = (e,id,status) =>{
+      setEditStatus(id);
+      setEditedStatus(status);
+    }
     const handleEditSubmit = async (e) => {
       e.preventDefault();
 
@@ -195,17 +225,59 @@ function Project({ token,setUsers }) {
                         <li>
                           Tasks:
                         </li>
+                        <div>
+                          {
+                          proj.tasks?(
+                            <div class="kanban-board">
+                            <div class="column">
+                                <h2>To Do</h2>
+                                <div class="task">Task 1</div>
+                                <div class="task">Task 2</div>
+                            </div>
+                            <div class="column">
+                                <h2>In Progress</h2>
+                                <div class="task">Task 3</div>
+                            </div>
+                            <div class="column">
+                                <h2>Done</h2>
+                                <div class="task">Task 4</div>
+                            </div>
+                        </div>
+                          ):(<></>)
+                          }
+                        </div>
 
                         {
-                        proj.tasks && proj.tasks.map(({ title,dueDate }, index) => (
+                        proj.tasks && proj.tasks.map(({ id,title,dueDate,status }, index) => (
                             <>
                             <li key={index}>task: {title}</li>
+                            {editStatus === id?(
+                              <form onSubmit={(e)=>handleEditStatusSubmit(e)}>
+                                <div>
+                                  <label htmlFor="status">Status:</label>
+                                  <input
+                                    type="text"
+                                    id="editedStatus"
+                                    name="editedStatus"
+                                    value={editedStatus}
+                                    onChange={(e)=>setEditedStatus(e.target.value)}
+                                    required
+                                  />
+                               </div>
+                              </form>
+                            ):(
+                              <li>Status:{status}</li>
+                              <li><button onClick={(e)=>handleStatusEdit(e,id,status)}>Edit Status</button></li>
+                            )}
+
+
 
                             </>
 
                         ))
                         }
                       </ul>
+
                     </li>
                   </ul>
                   )}
