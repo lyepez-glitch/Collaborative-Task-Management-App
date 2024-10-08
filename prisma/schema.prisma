@@ -32,16 +32,16 @@ model User {
 model Task {
     id String @id @default(uuid())
     title String
-    description String
-    status String
+    description String?
+    status String?
     dueDate DateTime?
-    priority String
+    priority String?
     assignedTo User @relation("TasksAssigned", fields: [assignedToId], references: [id])
     assignedToId String
-    createdBy User @relation("TasksCreated", fields: [createdById], references: [id])
-    createdById String
-    project Project @relation(fields: [projectId], references: [id])
-    projectId String
+    createdBy User? @relation("TasksCreated", fields: [createdById], references: [id])
+    createdById String?
+    project Project? @relation(fields: [projectId], references: [id])
+    projectId String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     activities Activity[]

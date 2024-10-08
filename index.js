@@ -99,7 +99,30 @@ app.post('/login', async(req, res) => {
     res.json({ message: 'Logged In successfully', token, user })
 
 })
+app.post('/tasks', async(req, res) => {
+    console.log('req body ', req.body);
+    const { title, desc, assignTo, dueDate } = req.body;
+    try {
+        const task = await prisma.task.create({
+            data: {
+                title,
+                description: desc,
+                assignedTo: {
+                    connect: {
+                        id: assignTo
+                    }
+                },
+                dueDate: dueDate ? new Date(dueDate) : null
+            }
+        })
+        res.status(201).json(task);
 
+    } catch (error) {
+        res.status(400).json({ error: 'Task creation failed', message: error.message });
+    }
+
+
+})
 
 
 

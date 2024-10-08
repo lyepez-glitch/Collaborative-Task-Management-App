@@ -10,8 +10,13 @@ const prisma = new PrismaClient()
 
 
 router.get('/', async(req, res) => {
-    const user = await prisma.user.findMany();
-    console.log('fetching user ', user);
+    const user = await prisma.user.findMany({
+        include: {
+            tasksAssigned: true,
+            tasksCreated: true,
+        },
+    });
+    // console.log('fetching user ', user);
     res.json(user);
 })
 
