@@ -5,6 +5,7 @@ import './App.css'
 import LogIn from './LogIn';
 import SignUp from './SignUp';
 import Profile from './Profile';
+import Project from './Project';
 import axios from 'axios';
 import User from './User';
 
@@ -43,6 +44,7 @@ function App() {
               Welcome to dashboard
               <Profile token={token} username={userName} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName}  setPassWord={setPassword} password={password} firstName={firstName} lastName = {lastName}  setUsers={setUsers} users={users} setUser={setUser} user={user}/>
               <User setUsers={setUsers} token={token} users={users}/>
+              <Project setUsers={setUsers} token={token}/>
             </div>
           ):(
             <LogIn password={password} username={userName} setPassword={setPassword} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName} setToken={setToken} setUsers={setUsers} users={users} setUser={setUser} user={user} setLogin={setLogin}/>

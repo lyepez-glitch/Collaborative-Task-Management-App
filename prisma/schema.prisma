@@ -51,12 +51,12 @@ model Task {
 model Project {
     id String @id @default(uuid())
     name String
-    description String
-    createdBy User @relation("ProjectsOwned", fields: [createdById], references: [id])
-    createdById String
-    startDate DateTime
+    description String?
+    createdBy User? @relation("ProjectsOwned", fields: [createdById], references: [id])
+    createdById String?
+    startDate DateTime?
     endDate DateTime?
-    status String
+    status String?
     tasks Task[]
     activities Activity[]
     createdAt DateTime @default(now())

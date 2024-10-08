@@ -99,6 +99,10 @@ app.post('/login', async(req, res) => {
     res.json({ message: 'Logged In successfully', token, user })
 
 })
+app.get('/tasks', async(req, res) => {
+    const tasks = await prisma.task.findMany();
+    res.json({ tasks: tasks });
+})
 app.post('/tasks', async(req, res) => {
     console.log('req body ', req.body);
     const { title, desc, assignTo, dueDate } = req.body;
@@ -123,7 +127,64 @@ app.post('/tasks', async(req, res) => {
 
 
 })
+app.get('/projects', async(req, res) => {
+    console.log('req body ', req.body);
+    const projects = await prisma.project.findMany({
+        include: {
+            tasks: true
+        },
+    });
 
+    res.json(projects);
+})
+
+app.post('/projects', async(req, res) => {
+    console.log('req body ', req.body);
+    const { name, description, task } = req.body;
+    try {
+        const project = await prisma.project.create({
+            data: {
+                name,
+                description,
+                tasks: {
+                    connect: task.map(id => ({ id }))
+                }
+            }
+        })
+        res.status(201).json(project);
+
+    } catch (error) {
+        res.status(400).json({ error: 'Project creation failed', message: error.message });
+    }
+
+})
+
+app.put('/projects/edit/:id', async(req, res) => {
+    console.log('edited req body ', req.body);
+    const { name, description, task } = req.body;
+    try {
+        const project = await prisma.project.update({
+            where: {
+                id: req.params.id
+            },
+            data: {
+                name,
+                description,
+                tasks: {
+                    set: task.map(id => ({ id }))
+                }
+            },
+            include: {
+                tasks: true
+            }
+        })
+        res.status(201).json(project);
+
+    } catch (error) {
+        res.status(400).json({ error: 'Project updating failed', message: error.message });
+    }
+
+})
 
 
 app.listen(port, () => {

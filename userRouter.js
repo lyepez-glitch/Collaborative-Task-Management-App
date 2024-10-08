@@ -40,4 +40,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), uploa
     console.log('updated user ', updateUser);
     res.json(updateUser);
 })
+
+
+
 module.exports = router;
