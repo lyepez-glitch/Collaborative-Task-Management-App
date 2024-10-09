@@ -11,9 +11,9 @@ function Project({ token,setUsers }) {
     const [editedName,setEditedName] = useState('');
     const [editedDescription,setEditedDescription] = useState('');
     const [editedSelectedTasks,setEditedSelectedTasks] = useState('');
-    const [setEditedStatus,editedStatus] = useState('');
-    const [setEditStatus,editStatus] = useState('');
-    const handleEditStatusSubmit = (e)=>{
+    const [editedStatus,setEditedStatus] = useState('');
+    const [editStatus,setEditStatus,] = useState('');
+    const handleEditStatusSubmit = async (e)=>{
       e.preventDefault();
       const taskData = {
         status:editedStatus
@@ -33,6 +33,7 @@ function Project({ token,setUsers }) {
           const projectsResponse = await axios.get('http://localhost:3000/projects');
           console.log('fetched projects', projectsResponse.data);
           setProjects(projectsResponse.data);
+          setEditStatus('');
       }catch(error){
         console.error('Error updating task status:', error.message);
       }
@@ -229,18 +230,38 @@ function Project({ token,setUsers }) {
                           {
                           proj.tasks?(
                             <div class="kanban-board">
+
                             <div class="column">
-                                <h2>To Do</h2>
-                                <div class="task">Task 1</div>
-                                <div class="task">Task 2</div>
+                              <h2>To Do</h2>
+                            {
+                              proj.tasks
+                                .filter((task) => task.status === 'To Do')
+                                .map((task, index) => (
+                                  <div key={index}>Task: {task.title}</div>
+                                ))
+                            }
+
                             </div>
                             <div class="column">
                                 <h2>In Progress</h2>
-                                <div class="task">Task 3</div>
+                                {
+                              proj.tasks
+                                .filter((task) => task.status === 'In Progress')
+                                .map((task, index) => (
+                                  <div key={index}>Task: {task.title}</div>
+                                ))
+                            }
+
                             </div>
                             <div class="column">
                                 <h2>Done</h2>
-                                <div class="task">Task 4</div>
+                                {
+                              proj.tasks
+                                .filter((task) => task.status === 'Done')
+                                .map((task, index) => (
+                                  <div key={index}>Task: {task.title}</div>
+                                ))
+                            }
                             </div>
                         </div>
                           ):(<></>)
@@ -264,10 +285,16 @@ function Project({ token,setUsers }) {
                                     required
                                   />
                                </div>
+                               <button type="submit">Submit</button>
                               </form>
                             ):(
+                              <>
                               <li>Status:{status}</li>
-                              <li><button onClick={(e)=>handleStatusEdit(e,id,status)}>Edit Status</button></li>
+                              <li>
+                                <button onClick={(e)=>handleStatusEdit(e,id,status)}>Edit Status</button>
+                              </li>
+                              </>
+
                             )}
 
 
@@ -316,9 +343,9 @@ function Project({ token,setUsers }) {
                         value={selectedTasks}
                         onChange={handleTaskChange}
                     >
-                        {tasks.map((task) => (
+                        {Array.isArray(tasks)?(tasks.map((task) => (
                             <option key={task.id} value={task.id}>{task.title}</option>
-                        ))}
+                        ))):(<></>)}
                     </select>
                 </div>
                 <button type="submit">Create Project</button>

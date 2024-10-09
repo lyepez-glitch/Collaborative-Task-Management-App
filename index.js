@@ -165,7 +165,7 @@ app.put('/tasks/editStatus/:id', async(req, res) => {
     const { status } = req.body;
     const { id } = req.params;
     const updatedTask = await prisma.task.update({
-        where {
+        where: {
             id: id
         },
         data: {
