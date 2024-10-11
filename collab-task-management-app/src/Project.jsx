@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import  io  from 'socket.io-client';
+
+
 
 function Project({ token,setUsers }) {
+  const [updatedTask,setUpdatedTask] = useState({});
+
+
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
     const [tasks, setTasks] = useState([]);
@@ -13,30 +19,94 @@ function Project({ token,setUsers }) {
     const [editedSelectedTasks,setEditedSelectedTasks] = useState('');
     const [editedStatus,setEditedStatus] = useState('');
     const [editStatus,setEditStatus,] = useState('');
-    const handleEditStatusSubmit = async (e)=>{
-      e.preventDefault();
-      const taskData = {
-        status:editedStatus
-      }
-      try{
-        const { data } = await axios.put(`http://localhost:3000/tasks/editStatus/${editStatus}`, taskData, {
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`,
-              },
-          });
 
-          console.log('edited task status response:', data);
-          const tasksResponse = await axios.get('http://localhost:3000/tasks');
-          console.log('fetched tasks', tasksResponse.data);
-          setTasks(tasksResponse.data);
-          const projectsResponse = await axios.get('http://localhost:3000/projects');
-          console.log('fetched projects', projectsResponse.data);
-          setProjects(projectsResponse.data);
-          setEditStatus('');
-      }catch(error){
-        console.error('Error updating task status:', error.message);
+    const [status,setStatus] = useState('');
+    const socket = io('http://localhost:3000',{auth:{token:token}});
+
+
+    const updateStatus = () =>{
+
+    }
+
+    useEffect(()=>{
+      const fetchTasks = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/tasks');
+            console.log('tasks are',response.data)
+            setTasks(response.data.tasks);
+            const projResponse = await axios.get('http://localhost:3000/projects');
+            console.log('projs are',projResponse.data)
+            setProjects(projResponse.data)
+
+        } catch (error) {
+            console.log('Error fetching tasks:', error);
+        }
+    };
+
+      const fetchProjects = async () => {
+          try {
+              const response = await axios.get('http://localhost:3000/projects');
+              setProjects(response.data);
+          } catch (error) {
+              console.log('Error fetching projects:', error);
+          }
+      };
+
+
+      socket.on('connect', () => {
+        console.log('Socket connected');
+      });
+
+
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected');
+      });
+      socket.on('status change',(updatedTask)=>{
+        console.log(59,updatedTask)
+        // setUpdatedTask(updatedTask);
+        setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, status: updatedTask.status } : task
+          )
+          );
+      })
+
+      fetchTasks();
+      fetchProjects();
+
+      return () => {
+        socket.off('status change');
+        socket.disconnect();
+      };
+
+
+
+    },[token])
+
+
+    const handleEditStatusSubmit = async (e,id)=>{
+      e.preventDefault();
+
+      console.log('handleEditStatusSubmit')
+
+      if(editedStatus){
+        console.log(79,{id:id,status:editedStatus})
+        socket.emit('status change',{id:id,status:editedStatus})
+        setEditStatus('');
+        const tasksResponse = await axios.get('http://localhost:3000/tasks');
+        console.log('fetched tasks', tasksResponse.data.tasks,updatedTask);
+        const editTasks = tasksResponse.data.tasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, status: updatedTask.status } : task
+          )
+        setTasks(editTasks);
+        const projectsResponse = await axios.get('http://localhost:3000/projects');
+        console.log('fetched projects', projectsResponse.data);
+        setProjects(projectsResponse.data);
+
+
       }
+
+
     }
     const handleStatusEdit = (e,id,status) =>{
       setEditStatus(id);
@@ -87,30 +157,30 @@ function Project({ token,setUsers }) {
       setEditedSelectedTasks(tasks.map(task => task.id))
     }
 
-    useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/tasks');
-                console.log('fetched tasks', response.data);
-                setTasks(response.data.tasks);
-            } catch (error) {
-                console.log('err', error);
-            }
-        };
-        fetchTasks();
+    // useEffect(() => {
+    //     const fetchTasks = async () => {
+    //         try {
+    //             const response = await axios.get('http://localhost:3000/tasks');
+    //             console.log('fetched tasks', response.data);
+    //             setTasks(response.data.tasks);
+    //         } catch (error) {
+    //             console.log('err', error);
+    //         }
+    //     };
+    //     fetchTasks();
 
-        const fetchProjects = async () => {
-          try {
-              const response = await axios.get('http://localhost:3000/projects');
-              console.log('fetched projects', response.data);
-              setProjects(response.data);
-          } catch (error) {
-              console.log('err', error);
-          }
-      };
-      fetchProjects();
+    //     const fetchProjects = async () => {
+    //       try {
+    //           const response = await axios.get('http://localhost:3000/projects');
+    //           console.log('fetched projects', response.data);
+    //           setProjects(response.data);
+    //       } catch (error) {
+    //           console.log('err', error);
+    //       }
+    //   };
+    //   fetchProjects();
 
-    }, []);
+    // }, []);
 
     const handleProjectSubmit = async (e) => {
         e.preventDefault();
@@ -229,9 +299,9 @@ function Project({ token,setUsers }) {
                         <div>
                           {
                           proj.tasks?(
-                            <div class="kanban-board">
+                            <div className="kanban-board">
 
-                            <div class="column">
+                            <div className="column">
                               <h2>To Do</h2>
                             {
                               proj.tasks
@@ -242,7 +312,7 @@ function Project({ token,setUsers }) {
                             }
 
                             </div>
-                            <div class="column">
+                            <div className="column">
                                 <h2>In Progress</h2>
                                 {
                               proj.tasks
@@ -253,7 +323,7 @@ function Project({ token,setUsers }) {
                             }
 
                             </div>
-                            <div class="column">
+                            <div className="column">
                                 <h2>Done</h2>
                                 {
                               proj.tasks
@@ -269,11 +339,11 @@ function Project({ token,setUsers }) {
                         </div>
 
                         {
-                        proj.tasks && proj.tasks.map(({ id,title,dueDate,status }, index) => (
+                        proj.tasks && proj.tasks.map((task, index) => (
                             <>
-                            <li key={index}>task: {title}</li>
-                            {editStatus === id?(
-                              <form onSubmit={(e)=>handleEditStatusSubmit(e)}>
+                            <li key={index}>task: {task.title}</li>
+                            {editStatus === task.id?(
+                              <form onSubmit={(e)=>handleEditStatusSubmit(e,task.id)}>
                                 <div>
                                   <label htmlFor="status">Status:</label>
                                   <input
@@ -289,9 +359,9 @@ function Project({ token,setUsers }) {
                               </form>
                             ):(
                               <>
-                              <li>Status:{status}</li>
+                              <li>Status:{task.status}</li>
                               <li>
-                                <button onClick={(e)=>handleStatusEdit(e,id,status)}>Edit Status</button>
+                                <button onClick={(e)=>handleStatusEdit(e,task.id,task.status)}>Edit Status</button>
                               </li>
                               </>
 
