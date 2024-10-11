@@ -4,7 +4,7 @@ import  io  from 'socket.io-client';
 
 
 
-function Project({ token,setUsers }) {
+function Project({ token,setUsers,users }) {
   const [updatedTask,setUpdatedTask] = useState({});
 
 
@@ -19,6 +19,9 @@ function Project({ token,setUsers }) {
     const [editedSelectedTasks,setEditedSelectedTasks] = useState('');
     const [editedStatus,setEditedStatus] = useState('');
     const [editStatus,setEditStatus,] = useState('');
+    const [editAssign,setEditAssign] = useState('');
+    const [editAssignTo,setEditAssignTo] = useState('');
+
 
     const [status,setStatus] = useState('');
     const socket = io('http://localhost:3000',{auth:{token:token}});
@@ -70,12 +73,22 @@ function Project({ token,setUsers }) {
           )
           );
       })
+      socket.on('assign change',(updatedTask)=>{
+        console.log(76,updatedTask)
+        // setUpdatedTask(updatedTask);
+        setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, assignedToId: updatedTask.assignedToId } : task
+          )
+          );
+      })
 
       fetchTasks();
       fetchProjects();
 
       return () => {
         socket.off('status change');
+        socket.off('assign change');
         socket.disconnect();
       };
 
@@ -83,6 +96,41 @@ function Project({ token,setUsers }) {
 
     },[token])
 
+    const setEditAssignToHandler =(e,task)=>{
+      setEditAssignTo(task.assignedToId)
+      setEditAssign(task.id);
+    }
+    const handleEditAssignSubmit = async(e,id,task)=>{
+      e.preventDefault();
+      console.log('handleEditAssignSubmit')
+      if(editAssignTo){
+        console.log(90,{id:id,assignedToId:editAssignTo},task.assignedToId)
+        socket.emit('assign change',{id:id,assignedToId:editAssignTo})
+        setEditAssignTo('');
+        setEditAssign('')
+
+        const tasksResponse = await axios.get('http://localhost:3000/tasks');
+        console.log('fetched tasks', tasksResponse.data.tasks,updatedTask);
+        const editTasks = tasksResponse.data.tasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, assignedToId: updatedTask.assignedToId } : task
+          )
+        setTasks(editTasks);
+        const projectsResponse = await axios.get('http://localhost:3000/projects');
+        console.log('fetched projects', projectsResponse.data);
+        setProjects(projectsResponse.data);
+        // const usersResponse = await axios.get('http://localhost:3000/users');
+        // console.log('fetched users', usersResponse.data);
+        // setUsers(usersResponse.data);
+
+
+
+      }
+    }
+
+    const handleAssignEdit = async(e,id,task)=>{
+      setEditAssign(id);
+      setEditAssignTo(task.assignedToId);
+    }
 
     const handleEditStatusSubmit = async (e,id)=>{
       e.preventDefault();
@@ -341,31 +389,95 @@ function Project({ token,setUsers }) {
                         {
                         proj.tasks && proj.tasks.map((task, index) => (
                             <>
-                            <li key={index}>task: {task.title}</li>
-                            {editStatus === task.id?(
-                              <form onSubmit={(e)=>handleEditStatusSubmit(e,task.id)}>
-                                <div>
-                                  <label htmlFor="status">Status:</label>
-                                  <input
-                                    type="text"
-                                    id="editedStatus"
-                                    name="editedStatus"
-                                    value={editedStatus}
-                                    onChange={(e)=>setEditedStatus(e.target.value)}
-                                    required
-                                  />
-                               </div>
-                               <button type="submit">Submit</button>
-                              </form>
-                            ):(
-                              <>
-                              <li>Status:{task.status}</li>
-                              <li>
-                                <button onClick={(e)=>handleStatusEdit(e,task.id,task.status)}>Edit Status</button>
-                              </li>
-                              </>
 
-                            )}
+{
+                              editStatus === task.id?(
+                                <form onSubmit={(e)=>handleEditStatusSubmit(e,task.id)}>
+                                  <div>
+                                    <label htmlFor="status">Status:</label>
+                                    <input
+                                      type="text"
+                                      id="editedStatus"
+                                      name="editedStatus"
+                                      value={editedStatus}
+                                      onChange={(e)=>setEditedStatus(e.target.value)}
+                                      required
+                                    />
+                                 </div>
+                                 <button type="submit">Submit</button>
+                                </form>
+                              ):(
+
+                                <>
+                                <li key={index}>task: {task.title}</li>
+                                <li>Status:{task.status}</li>
+                                <li>
+                                  <button onClick={(e)=>handleStatusEdit(e,task.id,task.status)}>Edit Status</button>
+                                </li>
+
+                                </>
+
+                              )
+                            }
+                            {/* <li key={index}>task: {task.title}</li> */}
+
+
+
+                            {
+                              editAssign === task.id?(
+                                <form onSubmit = {(e)=>handleEditAssignSubmit(e,task.id,task)}>
+                                  <div>
+                                  <label htmlFor="editAssignTo">Edit Assign To:</label>
+                                  <select name="editAssignTo"
+
+                                  value={editAssignTo}
+                                  onChange={e => {
+                                    setEditAssignTo(e.target.value);
+                                  }}>
+                                    {
+                                      users.map((user)=>(
+
+                                        <option key= {user.username} value={user.id}>{user.username}</option>
+
+                                  ))
+                                    }
+
+                                  </select>
+
+                            </div>
+                                  <button type="submit">Submit</button>
+                                </form>
+
+
+                              ):(
+
+                                <>
+                                <li>Assigned to:
+                                  {
+                                        users.map((user)=>(
+                                          user.id === task.assignedToId?(
+                                            <option key= {user.username} value={user.id}>{user.username}</option>
+                                          ):(
+                                            <>
+                                            </>
+                                          )
+
+
+                                    ))
+                                      }
+                                </li>
+                                <li>
+                                  <button onClick={(e)=>setEditAssignToHandler(e,task)}>Edit Assign To</button>
+                                </li>
+                                </>
+                              )
+
+
+
+
+
+
+                            }
 
 
 

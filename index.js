@@ -37,6 +37,19 @@ io.on("connection", (socket) => {
         })
         io.emit('status change', updatedTask)
     });
+    socket.on('assign change', async(updatedTask) => {
+        console.log('assign change received ', updatedTask);
+        const updateTask = await prisma.task.update({
+            where: {
+                id: updatedTask.id
+            },
+            data: {
+                assignedToId: updatedTask.assignedToId
+            }
+
+        })
+        io.emit('assign change', updatedTask)
+    });
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
