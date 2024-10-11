@@ -1,13 +1,48 @@
 require('dotenv').config();
 const express = require('express')
 const path = require('path');
+
+const { Server } = require("socket.io");
 const app = express()
+
+const { join } = require('node:path');
+const http = require('http');
+const server = http.createServer(app);
 var jwt = require('jsonwebtoken');
 const port = 3000
 const passport = require('passport');
 const cors = require('cors');
 const bcrypt = require('bcrypt')
 app.use(express.json());
+app.use(cors());
+const URL = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:3000';
+
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"]
+    }
+});
+io.on("connection", (socket) => {
+    console.log('connected')
+    socket.on('status change', async(updatedTask) => {
+        console.log('status change received ', updatedTask);
+        const updateTask = await prisma.task.update({
+            where: {
+                id: updatedTask.id
+            },
+            data: {
+                status: updatedTask.status
+            }
+        })
+        io.emit('status change', updatedTask)
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -21,7 +56,7 @@ app.use(cors(corsOptions))
 const userRouter = require('./userRouter')
 
 
-// ...
+
 
 app.use('/users', userRouter);
 
@@ -204,6 +239,6 @@ app.put('/projects/edit/:id', async(req, res) => {
 })
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
