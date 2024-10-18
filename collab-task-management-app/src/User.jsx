@@ -14,36 +14,46 @@ function User({users,token,setUsers}){
 };
   return(
     <>
+
     <Task setUsers={setUsers} token={token} users={users}/>
+    <div className="usersContainer">
     {
       users && users.map(({id,username,firstName,lastName,tasksAssigned}) => (
         <>
-        <ul>
-          <li>{username}</li>
-          <li>{firstName}</li>
-          <li>{lastName}</li>
+        <div>
+          <ul className="userEle">
+            <li>{username}</li>
+            <li>{firstName}</li>
+            <li>{lastName}</li>
 
-          <li>
-            <ul>
-              <li>
-                 Tasks:
-              </li>
+            <li>
+              <ul>
+                <li>
+                  Tasks:
+                </li>
 
-              {
-              tasksAssigned && tasksAssigned.map(({ title,dueDate }, index) => (
-                  <>
-                  <li key={index}>task: {title}</li>
-                  <li>due: {formatDate(dueDate)}</li>
-                  </>
+                {
+                tasksAssigned && tasksAssigned.map(({ title,dueDate }, index) => (
+                    <>
+                    <div className= "userTask">
+                      <li  key={index}>task: {title}</li>
+                      <li>due: {formatDate(dueDate)}</li>
+                    </div>
 
-              ))
-              }
-            </ul>
-          </li>
-        </ul>
+                    </>
+
+                ))
+                }
+              </ul>
+            </li>
+          </ul>
+        </div>
+
         </>
       ))
     }
+    </div>
+
 
     </>
   )

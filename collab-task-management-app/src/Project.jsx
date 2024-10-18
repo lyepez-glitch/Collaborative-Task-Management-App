@@ -285,13 +285,13 @@ function Project({ token,setUsers,users }) {
     return (
         <>
 
-            <div>
-              <h3>Projects: </h3>
+            <div className="projectsContainer">
+              <h3 className= "projectsHeader">Projects: </h3>
               {
                 projects && projects.map((proj) => (
                   <>
                   {edit === proj.id?(
-                    <form id="editProject" onSubmit={(e)=>handleEditSubmit(e)}>
+                    <form className="editProjectForm" id="editProject" onSubmit={(e)=>handleEditSubmit(e)}>
                     <h3>Edit Project</h3>
                     <div>
                       <label htmlFor="editedName">Edit Name:</label>
@@ -334,17 +334,17 @@ function Project({ token,setUsers,users }) {
                     <button type="submit">Submit</button>
                   </form>
                   ):(
-                    <ul>
+                    <ul className="projectEle">
                     <li>Name:{proj.name}</li>
                     <li>Description:{proj.description}</li>
                     <button onClick={(e)=>{handleProjectEdit(e,proj.id,proj.name,proj.description,proj.tasks)}}>Edit</button>
 
                     <li>
                       <ul>
-                        <li>
+                        <li className="kanban">
                           Tasks:
                         </li>
-                        <div>
+                        <div >
                           {
                           proj.tasks?(
                             <div className="kanban-board">
@@ -494,7 +494,7 @@ function Project({ token,setUsers,users }) {
                 ))
               }
             </div>
-            <form id="project" onSubmit={handleProjectSubmit}>
+            <form className="projectForm" id="project" onSubmit={handleProjectSubmit}>
                 <div>
                     <label htmlFor="name">Name:</label>
                     <input

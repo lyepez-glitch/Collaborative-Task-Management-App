@@ -29,8 +29,8 @@ function LogIn({password,setPassword,username,setFirstName,setLastName,setUserNa
   }
   return (
     <>
-    <form id="login" onSubmit={handleSubmit}>
-      <h3>LogIn</h3>
+    <form className="logInForm" id="login" onSubmit={handleSubmit}>
+      <h3 className="logInHeader">LogIn</h3>
       <div>
         <label htmlFor="name">username:</label>
         <input
@@ -60,7 +60,7 @@ function LogIn({password,setPassword,username,setFirstName,setLastName,setUserNa
           value={user.id}
         />
 
-      <button type="submit">Submit</button>
+      <button className="loginBtn" type="submit">Submit</button>
     </form>
     </>
   )

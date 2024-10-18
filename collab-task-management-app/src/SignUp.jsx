@@ -24,8 +24,8 @@ function SignUp({username,setUsername,password,setPassword,setSignup,setUser,use
   }
   return (
     <>
-    <form id="signup" onSubmit={handleSubmit}>
-      <h3>Signup</h3>
+    <form className="signUpForm" id="signup" onSubmit={handleSubmit}>
+      <h3 className="signUpHeader">Signup</h3>
       <div>
         <label htmlFor="name">username:</label>
         <input
@@ -50,7 +50,7 @@ function SignUp({username,setUsername,password,setPassword,setSignup,setUser,use
         />
       </div>
 
-      <button type="submit">Submit</button>
+      <button className="submitBtn" type="submit">Submit</button>
     </form>
     </>
   )

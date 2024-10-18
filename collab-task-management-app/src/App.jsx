@@ -49,7 +49,7 @@ function App() {
       {
         signedUp?(
           loggedIn?(
-            <div>
+            <div className="dashboardHeader">
               Welcome to dashboard
               <Profile token={token} username={userName} setUserName={setUserName} setFirstName={setFirstName} setLastName={setLastName}  setPassWord={setPassword} password={password} firstName={firstName} lastName = {lastName}  setUsers={setUsers} users={users} setUser={setUser} user={user}/>
               <User setUsers={setUsers} token={token} users={users}/>

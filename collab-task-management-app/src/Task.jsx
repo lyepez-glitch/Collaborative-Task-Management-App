@@ -52,7 +52,7 @@ function Task({users,token,setUsers}){
   }
   return (
     <>
-    <form id="login" onSubmit={(e)=>handleTaskSubmit(e)}>
+    <form className="taskForm" id="login" onSubmit={(e)=>handleTaskSubmit(e)}>
           <div>
             <label htmlFor="title">Title:</label>
             <input
@@ -124,7 +124,7 @@ function Task({users,token,setUsers}){
 
 
 
-          <button type="submit">Create Task</button>
+          <button className = "taskBtn" type="submit">Create Task</button>
         </form>
     </>
   )
