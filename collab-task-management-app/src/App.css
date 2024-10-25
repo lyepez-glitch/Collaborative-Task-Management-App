@@ -193,3 +193,90 @@ body {
     flex-wrap: wrap;
     gap: 8px;
 }
+
+.signUpForm,
+.logInForm,
+.editProfileForm,
+.taskForm,
+.projectForm {
+    background-color: lightgreen;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    /* Change from fixed width to percentage */
+    max-width: 300px;
+    /* Set max-width for larger screens */
+    height: auto;
+    /* Set height to auto to accommodate content */
+    margin: 0 auto;
+    /* Center forms */
+}
+
+.submitBtn,
+.loginBtn,
+.editProfileBtn,
+.taskBtn {
+    margin-top: 20px;
+}
+
+.user,
+.userEle,
+.userTask,
+.projectEle,
+.editProjectForm {
+    background-color: lightpink;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    /* Center user elements */
+    width: 90%;
+    /* Responsive width */
+    max-width: 300px;
+    /* Max width */
+}
+
+.projectsHeader {
+    margin-bottom: 50px;
+}
+
+.kanban {
+    margin-top: 20px;
+}
+
+.usersContainer,
+.projectsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Center items */
+    gap: 16px;
+    /* Increased gap for better spacing */
+}
+
+@media (max-width: 768px) {
+    #root {
+        padding: 1rem;
+        /* Reduce padding on smaller screens */
+    }
+    .signUpForm,
+    .logInForm,
+    .editProfileForm,
+    .taskForm,
+    .projectForm,
+    .user,
+    .userEle,
+    .userTask,
+    .projectEle,
+    .editProjectForm {
+        width: 100%;
+        /* Full width on mobile */
+        max-width: none;
+        /* Remove max width */
+    }
+    .projectsHeader {
+        margin-bottom: 20px;
+        /* Reduce spacing on mobile */
+    }
+}
