@@ -1,6 +1,6 @@
 import Task from './Task';
 
-function User({users,token,setUsers}){
+function User({setTasks,users,token,setUsers}){
 
   const formatDate = (date) => {
     if (!date) return 'No due date';
@@ -15,7 +15,8 @@ function User({users,token,setUsers}){
   return(
     <>
 
-    <Task setUsers={setUsers} token={token} users={users}/>
+    <Task setTasks={setTasks} setUsers={setUsers} token={token} users={users}/>
+    <h2>Users</h2>
     <div className="usersContainer">
     {
       users && users.map(({id,username,firstName,lastName,tasksAssigned}) => (

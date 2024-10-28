@@ -116,7 +116,8 @@ function Profile({ setUser, token,setUsers,users,user }) {
                     <div>First Name: {user.firstName}</div>
                     <div>Last Name: {user.lastName}</div>
                     <div>Role: {user.role}</div>
-                    <div>Profile Image: <img style={{width: '100px',height:'100px'}} src={'http://localhost:3000/' + user.profileImage} alt="" /></div>
+                    <div><div className="profImgText">Profile Image:</div> <img style={{width: '100px',height:'100px'}} src={'http://localhost:3000/' + user.profileImage} alt="" /></div>
+
                     <button className="editProfileBtn" onClick={() => handleEdit(user.id)}>Edit Profile</button>
                     </div>
 

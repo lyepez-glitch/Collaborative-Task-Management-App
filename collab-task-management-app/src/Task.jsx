@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-function Task({users,token,setUsers}){
+function Task({setTasks,users,token,setUsers}){
   const [assignTo,setAssignTo] = useState('');
   const [title,setTitle] = useState('');
   const [desc,setDesc] = useState('');
   const [dueDate,setDueDate] = useState('');
   const [status,setStatus] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
 
 
@@ -36,9 +37,16 @@ function Task({users,token,setUsers}){
         });
 
         console.log('task response:', data);
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 3000); // Hide popup after 3 seconds
 
+        setTasks((prevTasks) => [...prevTasks, data]);
+        // setTasks(data);
         const response = await axios.get('http://localhost:3000/users');
         // console.log('fetched users',response.data);
+
         setUsers(response.data);
 
 
@@ -126,6 +134,7 @@ function Task({users,token,setUsers}){
 
           <button className = "taskBtn" type="submit">Create Task</button>
         </form>
+        {showPopup && <div className={`popup ${showPopup ? 'fade-out' : ''}`}>Task Created</div>}
     </>
   )
 }

@@ -4,13 +4,13 @@ import  io  from 'socket.io-client';
 
 
 
-function Project({ token,setUsers,users }) {
+function Project({ tasks,setTasks,token,setUsers,users }) {
   const [updatedTask,setUpdatedTask] = useState({});
 
 
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
-    const [tasks, setTasks] = useState([]);
+    // const [tasks, setTasks] = useState([]);
     const [selectedTasks, setSelectedTasks] = useState([]);
     const [projects,setProjects] = useState([]);
     const [edit,setEdit] = useState(false);
@@ -21,6 +21,7 @@ function Project({ token,setUsers,users }) {
     const [editStatus,setEditStatus,] = useState('');
     const [editAssign,setEditAssign] = useState('');
     const [editAssignTo,setEditAssignTo] = useState('');
+    const [showProjPopup, setShowProjPopup] = useState(false);
 
 
     const [status,setStatus] = useState('');
@@ -248,6 +249,10 @@ function Project({ token,setUsers,users }) {
             });
 
             console.log('project response:', data);
+            setShowProjPopup(true);
+            setTimeout(() => {
+              setShowProjPopup(false);
+            }, 3000); // Hide popup after 3 seconds
             const response = await axios.get('http://localhost:3000/projects');
             console.log('fetched projects', response.data);
             setProjects(response.data);
@@ -350,7 +355,7 @@ function Project({ token,setUsers,users }) {
                             <div className="kanban-board">
 
                             <div className="column">
-                              <h2>To Do</h2>
+                              <h2 class="kanbanTitle">To Do</h2>
                             {
                               proj.tasks
                                 .filter((task) => task.status === 'To Do')
@@ -361,7 +366,7 @@ function Project({ token,setUsers,users }) {
 
                             </div>
                             <div className="column">
-                                <h2>In Progress</h2>
+                                <h2 class="kanbanTitle">In Progress</h2>
                                 {
                               proj.tasks
                                 .filter((task) => task.status === 'In Progress')
@@ -372,7 +377,7 @@ function Project({ token,setUsers,users }) {
 
                             </div>
                             <div className="column">
-                                <h2>Done</h2>
+                                <h2 class="kanbanTitle">Done</h2>
                                 {
                               proj.tasks
                                 .filter((task) => task.status === 'Done')
@@ -518,7 +523,7 @@ function Project({ token,setUsers,users }) {
                     />
                 </div>
                 <div>
-                    <label htmlFor="task">Add tasks:</label>
+                    <label style={{display:'block'}}  htmlFor="task">Add tasks:</label>
                     <select
                         name="task"
                         multiple // Allow multiple selection
@@ -532,6 +537,7 @@ function Project({ token,setUsers,users }) {
                 </div>
                 <button type="submit">Create Project</button>
             </form>
+            {showProjPopup && <div className={`popup ${showProjPopup ? 'fade-out' : ''}`}>Project Created</div>}
         </>
     );
 }

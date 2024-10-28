@@ -171,16 +171,21 @@ app.post('/tasks', async(req, res) => {
         res.status(201).json(task);
 
     } catch (error) {
+        console.log('error msg', error.message)
         res.status(400).json({ error: 'Task creation failed', message: error.message });
     }
 
 
 })
+
 app.get('/projects', async(req, res) => {
     console.log('req body ', req.body);
     const projects = await prisma.project.findMany({
         include: {
             tasks: true
+        },
+        orderBy: {
+            name: 'asc', // Replace 'name' with the actual field you want to sort by
         },
     });
 
