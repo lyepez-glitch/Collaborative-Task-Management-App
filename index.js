@@ -15,6 +15,9 @@ const cors = require('cors');
 const bcrypt = require('bcrypt')
 app.use(express.json());
 app.use(cors());
+
+
+
 const URL = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:3000';
 
 const io = new Server(server, {
