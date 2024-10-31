@@ -9,7 +9,7 @@ const { join } = require('node:path');
 const http = require('http');
 const server = http.createServer(app);
 var jwt = require('jsonwebtoken');
-const port = 3000
+const PORT = process.env.PORT || 3000
 const passport = require('passport');
 const cors = require('cors');
 const bcrypt = require('bcrypt')
@@ -260,6 +260,6 @@ app.put('/projects/edit/:id', async(req, res) => {
 })
 
 
-server.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+server.listen(PORT, () => {
+    console.log(`Example app listening on port ${PORT}`)
 })
