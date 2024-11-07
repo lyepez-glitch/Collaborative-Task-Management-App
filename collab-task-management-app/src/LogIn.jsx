@@ -7,7 +7,7 @@ function LogIn({password,setPassword,username,setFirstName,setLastName,setUserNa
   const handleSubmit = async(e)=>{
     e.preventDefault();
     console.log(10)
-    const {data} = await axios.post('http://localhost:3000/login', document.querySelector('#login'), {
+    const {data} = await axios.post('https://collaborative-task-management-app.onrender.com/login', document.querySelector('#login'), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -21,7 +21,7 @@ function LogIn({password,setPassword,username,setFirstName,setLastName,setUserNa
       setUserName(user.userName);
       setToken(data.token);
       setLogin(true);
-      const response = await axios.get('http://localhost:3000/users');
+      const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
       console.log('fetched users',response.data);
       setUsers(response.data);
 

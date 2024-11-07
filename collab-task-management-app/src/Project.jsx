@@ -25,7 +25,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
 
 
     const [status,setStatus] = useState('');
-    const socket = io('http://localhost:3000',{auth:{token:token}});
+    const socket = io('https://collaborative-task-management-app.onrender.com',{auth:{token:token}});
 
 
     const updateStatus = () =>{
@@ -35,10 +35,10 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
     useEffect(()=>{
       const fetchTasks = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/tasks');
+            const response = await axios.get('https://collaborative-task-management-app.onrender.com/tasks');
             console.log('tasks are',response.data)
             setTasks(response.data.tasks);
-            const projResponse = await axios.get('http://localhost:3000/projects');
+            const projResponse = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
             console.log('projs are',projResponse.data)
             setProjects(projResponse.data)
 
@@ -49,7 +49,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
 
       const fetchProjects = async () => {
           try {
-              const response = await axios.get('http://localhost:3000/projects');
+              const response = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
               setProjects(response.data);
           } catch (error) {
               console.log('Error fetching projects:', error);
@@ -110,16 +110,16 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
         setEditAssignTo('');
         setEditAssign('')
 
-        const tasksResponse = await axios.get('http://localhost:3000/tasks');
+        const tasksResponse = await axios.get('https://collaborative-task-management-app.onrender.com/tasks');
         console.log('fetched tasks', tasksResponse.data.tasks,updatedTask);
         const editTasks = tasksResponse.data.tasks.map((task) =>
           task.id === updatedTask.id ? { ...task, assignedToId: updatedTask.assignedToId } : task
           )
         setTasks(editTasks);
-        const projectsResponse = await axios.get('http://localhost:3000/projects');
+        const projectsResponse = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
         console.log('fetched projects', projectsResponse.data);
         setProjects(projectsResponse.data);
-        // const usersResponse = await axios.get('http://localhost:3000/users');
+        // const usersResponse = await axios.get('https://collaborative-task-management-app.onrender.com/users');
         // console.log('fetched users', usersResponse.data);
         // setUsers(usersResponse.data);
 
@@ -142,13 +142,13 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
         console.log(79,{id:id,status:editedStatus})
         socket.emit('status change',{id:id,status:editedStatus})
         setEditStatus('');
-        const tasksResponse = await axios.get('http://localhost:3000/tasks');
+        const tasksResponse = await axios.get('https://collaborative-task-management-app.onrender.com/tasks');
         console.log('fetched tasks', tasksResponse.data.tasks,updatedTask);
         const editTasks = tasksResponse.data.tasks.map((task) =>
           task.id === updatedTask.id ? { ...task, status: updatedTask.status } : task
           )
         setTasks(editTasks);
-        const projectsResponse = await axios.get('http://localhost:3000/projects');
+        const projectsResponse = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
         console.log('fetched projects', projectsResponse.data);
         setProjects(projectsResponse.data);
 
@@ -171,7 +171,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
       };
 
       try {
-          const { data } = await axios.put(`http://localhost:3000/projects/edit/${edit}`, projectData, {
+          const { data } = await axios.put(`https://collaborative-task-management-app.onrender.com/projects/edit/${edit}`, projectData, {
               headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`,
@@ -179,10 +179,10 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
           });
 
           console.log('edited project response:', data);
-          const response = await axios.get('http://localhost:3000/projects');
+          const response = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
           console.log('fetched projects', response.data);
           setProjects(response.data);
-          // const userResponse = await axios.get('http://localhost:3000/users');
+          // const userResponse = await axios.get('https://collaborative-task-management-app.onrender.com/users');
           // console.log('fetched users', userResponse.data);
           // setUsers(userResponse.data);
           setEdit('')
@@ -209,7 +209,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
     // useEffect(() => {
     //     const fetchTasks = async () => {
     //         try {
-    //             const response = await axios.get('http://localhost:3000/tasks');
+    //             const response = await axios.get('https://collaborative-task-management-app.onrender.com/tasks');
     //             console.log('fetched tasks', response.data);
     //             setTasks(response.data.tasks);
     //         } catch (error) {
@@ -220,7 +220,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
 
     //     const fetchProjects = async () => {
     //       try {
-    //           const response = await axios.get('http://localhost:3000/projects');
+    //           const response = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
     //           console.log('fetched projects', response.data);
     //           setProjects(response.data);
     //       } catch (error) {
@@ -241,7 +241,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
         };
 
         try {
-            const { data } = await axios.post(`http://localhost:3000/projects`, projectData, {
+            const { data } = await axios.post(`https://collaborative-task-management-app.onrender.com/projects`, projectData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -253,7 +253,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
             setTimeout(() => {
               setShowProjPopup(false);
             }, 3000); // Hide popup after 3 seconds
-            const response = await axios.get('http://localhost:3000/projects');
+            const response = await axios.get('https://collaborative-task-management-app.onrender.com/projects');
             console.log('fetched projects', response.data);
             setProjects(response.data);
         } catch (error) {

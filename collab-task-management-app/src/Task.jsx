@@ -29,7 +29,7 @@ function Task({setTasks,users,token,setUsers}){
 
 
     try {
-        const { data } = await axios.post(`http://localhost:3000/tasks`, taskData, {
+        const { data } = await axios.post(`https://collaborative-task-management-app.onrender.com/tasks`, taskData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -44,7 +44,7 @@ function Task({setTasks,users,token,setUsers}){
 
         setTasks((prevTasks) => [...prevTasks, data]);
         // setTasks(data);
-        const response = await axios.get('http://localhost:3000/users');
+        const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
         // console.log('fetched users',response.data);
 
         setUsers(response.data);

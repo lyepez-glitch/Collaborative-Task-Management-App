@@ -7,7 +7,7 @@ function SignUp({username,setUsername,password,setPassword,setSignup,setUser,use
   const handleSubmit = async(e)=>{
     e.preventDefault();
     console.log(10)
-    const {data} = await axios.post('http://localhost:3000/signup', document.querySelector('#signup'), {
+    const {data} = await axios.post('https://collaborative-task-management-app.onrender.com/signup', document.querySelector('#signup'), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -17,7 +17,7 @@ function SignUp({username,setUsername,password,setPassword,setSignup,setUser,use
       console.log(18)
       setSignup(true);
       setUser(data.user);
-      const response = await axios.get('http://localhost:3000/users');
+      const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
       console.log('fetched users',response.data);
       setUsers(response.data);
     }
