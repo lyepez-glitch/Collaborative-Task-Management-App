@@ -23,7 +23,7 @@ const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://collabo
 
 const io = new Server(server, {
     cors: {
-        origin: "collab-task-management-app.vercel.app",
+        origin: "https://collaborative-task-management-app-9dtp-508wae1hc.vercel.app",
         methods: ["GET", "POST"]
     }
 });
