@@ -64,12 +64,12 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const corsOptions = {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false,
-    "optionsSuccessStatus": 204
-}
-app.use(cors(corsOptions))
+    origin: 'https://collaborative-task-management-app-9dtp-508wae1hc.vercel.app', // Vercel frontend URL
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204
+};
+app.use(cors(corsOptions));
 const userRouter = require('./userRouter')
 
 
