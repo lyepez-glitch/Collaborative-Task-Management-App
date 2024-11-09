@@ -12,6 +12,12 @@ License
 Features
 User Registration & Authentication:
 
+To run the backend in one tab, navigate to
+https://collaborative-task-management-app.onrender.com
+
+To run the frontend in another tab, navigate to
+https://collaborative-task-management-app-9dtp-eukwt2ahc.vercel.app
+
 Secure user authentication with Passport.js or JWT.
 User profile management with role-based permissions for Admins and Regular Users.
 Managed with Prisma and PostgreSQL.
@@ -54,6 +60,9 @@ Repository
 The complete code repository is available on GitHub:
 
 Collaborative Task Management App - GitHub Repo
+
+GitHub: https://github.com/lyepez-glitch/Collaborative-Task-Management-App
+
 Usage
 Open the frontend and backend links in separate tabs to access the app.
 Register or log in to create a new account.
@@ -71,5 +80,4 @@ New features are documented in the API documentation.
 README is updated for significant changes.
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
-
 
