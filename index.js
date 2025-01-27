@@ -23,10 +23,11 @@ const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://collabo
 
 const io = new Server(server, {
     cors: {
-        origin: "https://collaborative-task-management-app-9dtp-508wae1hc.vercel.app",
+        origin: "https://collaborative-task-management-app-9dtp.vercel.app",
         methods: ["GET", "POST"]
     }
 });
+
 io.on("connection", (socket) => {
     console.log('connected')
     socket.on('status change', async(updatedTask) => {
@@ -64,7 +65,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const corsOptions = {
-    origin: 'https://collaborative-task-management-app-9dtp-508wae1hc.vercel.app', // Vercel frontend URL
+    origin: 'https://collaborative-task-management-app-9dtp.vercel.app', // Vercel frontend URL
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     optionsSuccessStatus: 204
