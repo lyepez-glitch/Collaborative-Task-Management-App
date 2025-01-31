@@ -26,7 +26,7 @@ function Project({ tasks,setTasks,token,setUsers,users }) {
 
 
     const [status,setStatus] = useState('');
-    const socket = io(`backendUrl`,{auth:{token:token}});
+    const socket = io(`${backendUrl}`,{auth:{token:token}});
 
 
     const updateStatus = () =>{
