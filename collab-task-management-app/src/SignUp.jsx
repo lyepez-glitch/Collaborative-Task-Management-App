@@ -4,7 +4,7 @@ import axios from 'axios'
 function SignUp({username,setUsername,password,setPassword,setSignup,setUser,user,setUsers,users}){
 
   const backendUrl = import.meta.env.VITE_RENDER_URL;
-
+  console.log('backendurl',backendUrl);
   const handleSubmit = async(e)=>{
     e.preventDefault();
 
