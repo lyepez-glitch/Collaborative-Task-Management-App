@@ -2,28 +2,30 @@ import { useState } from 'react'
 import axios from 'axios'
 
 function LogIn({password,setPassword,username,setFirstName,setLastName,setUserName,setLogin,setUser,user,setUsers,users,setToken}){
+  const backendUrl = import.meta.env.VITE_RENDER_URL;
 
 
   const handleSubmit = async(e)=>{
     //
+
     e.preventDefault();
-    console.log(10)
-    const {data} = await axios.post('https://collaborative-task-management-app.onrender.com/login', document.querySelector('#login'), {
+
+    const {data} = await axios.post(`${backendUrl}/login`, document.querySelector('#login'), {
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    console.log('data',data,data.message==='Logged In successfully')
+
     if(data.message==='Logged In successfully'){
-      console.log(18)
+
       setUser(data.user);
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setUserName(user.userName);
       setToken(data.token);
       setLogin(true);
-      const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
-      console.log('fetched users',response.data);
+      const response = await axios.get(`${backendUrl}/users`);
+
       setUsers(response.data);
 
     }

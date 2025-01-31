@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
@@ -16,14 +17,14 @@ router.get('/', async(req, res) => {
             tasksCreated: true,
         },
     });
-    // console.log('fetching user ', user);
+
     res.json(user);
 })
 
 router.post('/edit/:id', passport.authenticate('jwt', { session: false }), upload.single('editedProfileImage'), async(req, res) => {
     const { editedName, editedFirstName, editedLastName, editedPassword } = req.body;
     const userId = req.params.id;
-    console.log('req.file', req.file)
+
     const editedImg = req.file.path;
     const updateUser = await prisma.user.update({
         where: {

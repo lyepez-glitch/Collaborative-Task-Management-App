@@ -8,15 +8,13 @@ function Task({setTasks,users,token,setUsers}){
   const [dueDate,setDueDate] = useState('');
   const [status,setStatus] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const backendUrl = import.meta.env.VITE_RENDER_URL;
 
 
 
   const handleTaskSubmit = async(e) =>{
     e.preventDefault();
-    // const formData = new FormData();
-    // formData.append('title', title);
-    // formData.append('desc', desc);
-    // formData.append('assignTo', assignTo);
+
     const taskData = {
       title,
       desc,
@@ -29,14 +27,14 @@ function Task({setTasks,users,token,setUsers}){
 
 
     try {
-        const { data } = await axios.post(`https://collaborative-task-management-app.onrender.com/tasks`, taskData, {
+        const { data } = await axios.post(`${backendUrl}/tasks`, taskData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
         });
 
-        console.log('task response:', data);
+
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
@@ -44,14 +42,14 @@ function Task({setTasks,users,token,setUsers}){
 
         setTasks((prevTasks) => [...prevTasks, data]);
         // setTasks(data);
-        const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
-        // console.log('fetched users',response.data);
+        const response = await axios.get(`${backendUrl}/users`);
+
 
         setUsers(response.data);
 
 
     } catch (error) {
-        console.error('Error adding task:', error.message);
+        console.error('Error adding task:');
     }
     setAssignTo(null)
     setTitle(null);

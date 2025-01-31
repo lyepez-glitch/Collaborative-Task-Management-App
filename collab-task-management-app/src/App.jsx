@@ -26,16 +26,17 @@ function App() {
   const [userName,setUserName] = useState('');
   const [password,setPassword] = useState('');
   const [tasks, setTasks] = useState([]);
+  const backendUrl = import.meta.env.VITE_RENDER_URL;
 
 
   useEffect(() => {
     const fetchData = async ()=>{
       try{
-        const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
-        console.log('fetched users',response.data);
+        const response = await axios.get(`${backendUrl}/users`);
+
         setUsers(response.data);
       }catch(error){
-        console.log('err',error);
+        console.log('err');
       }
     }
     fetchData();

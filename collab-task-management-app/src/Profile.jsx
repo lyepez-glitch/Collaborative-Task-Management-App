@@ -8,6 +8,7 @@ function Profile({ setUser, token,setUsers,users,user }) {
     const [editedFirstName, setEditedFirstName] = useState('');
     const [editedLastName, setEditedLastName] = useState('');
     const [editedProfileImage, setEditedProfileImage] = useState(null); // Store the file object
+    const backendUrl = import.meta.env.VITE_RENDER_URL;
 
     const handleEdit = (id) => {
         setEdit(id);
@@ -29,22 +30,22 @@ function Profile({ setUser, token,setUsers,users,user }) {
         }
 
         try {
-            const { data } = await axios.post(`https://collaborative-task-management-app.onrender.com/users/edit/${user.id}`, formData, {
+            const { data } = await axios.post(`${backendUrl}/users/edit/${user.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Set the header for file upload
                     'Authorization': `Bearer ${token}`,
                 },
             });
             setEdit(null);
-            console.log('User response:', data);
+
             setUser(data); // Update the user state with the response data
-            const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
-            console.log('fetched users',response.data);
+            const response = await axios.get(`${backendUrl}/users`);
+
             setUsers(response.data);
 
 
         } catch (error) {
-            console.error('Error updating profile:', error);
+            console.error('Error updating profile:');
         }
     };
 
@@ -116,7 +117,7 @@ function Profile({ setUser, token,setUsers,users,user }) {
                     <div>First Name: {user.firstName}</div>
                     <div>Last Name: {user.lastName}</div>
                     <div>Role: {user.role}</div>
-                    <div><div className="profImgText">Profile Image:</div> <img style={{width: '100px',height:'100px'}} src={'https://collaborative-task-management-app.onrender.com/' + user.profileImage} alt="" /></div>
+                    <div><div className="profImgText">Profile Image:</div> <img style={{width: '100px',height:'100px'}} src={`${backendUrl}/` + user.profileImage} alt="" /></div>
 
                     <button className="editProfileBtn" onClick={() => handleEdit(user.id)}>Edit Profile</button>
                     </div>

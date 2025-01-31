@@ -15,15 +15,15 @@ const cors = require('cors');
 const bcrypt = require('bcrypt')
 app.use(express.json());
 app.use(cors());
+const backendUrl = process.env.VITE_RENDER_URL;
+const frontendUrl = process.env.FRONTEND_URL;
 
 
-
-
-const URL = process.env.NODE_ENV === 'production' ? undefined : 'https://collaborative-task-management-app.onrender.com';
+const URL = process.env.NODE_ENV === 'production' ? undefined : backendUrl;
 
 const io = new Server(server, {
     cors: {
-        origin: "https://collaborative-task-management-app-9dtp.vercel.app",
+        origin: frontendUrl,
         methods: ["GET", "POST"]
     }
 });
@@ -65,7 +65,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const corsOptions = {
-    origin: 'https://collaborative-task-management-app-9dtp.vercel.app', // Vercel frontend URL
+    origin: frontendUrl, // Vercel frontend URL
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     optionsSuccessStatus: 204
@@ -82,7 +82,7 @@ var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = 'secret';
+opts.secretOrKey = process.env.SECRET;
 passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {
     try {
         const user = await prisma.user.findUnique({
@@ -148,7 +148,7 @@ app.post('/login', async(req, res) => {
         return res.status(401).json({ message: 'Invalid Credentials' });
     }
     const payload = { sub: user.id };
-    const token = jwt.sign(payload, 'secret', { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
     res.json({ message: 'Logged In successfully', token, user })
 
 })

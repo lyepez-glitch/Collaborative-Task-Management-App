@@ -3,22 +3,23 @@ import axios from 'axios'
 
 function SignUp({username,setUsername,password,setPassword,setSignup,setUser,user,setUsers,users}){
 
+  const backendUrl = import.meta.env.VITE_RENDER_URL;
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    console.log(10)
-    const {data} = await axios.post('https://collaborative-task-management-app.onrender.com/signup', document.querySelector('#signup'), {
+
+    const {data} = await axios.post(`${backendUrl}/signup`, document.querySelector('#signup'), {
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    console.log('data',data,data.message==='User registered successfully')
+
     if(data.message==='User registered successfully'){
-      console.log(18)
+
       setSignup(true);
       setUser(data.user);
-      const response = await axios.get('https://collaborative-task-management-app.onrender.com/users');
-      console.log('fetched users',response.data);
+      const response = await axios.get(`${backendUrl}/users`);
+
       setUsers(response.data);
     }
   }
